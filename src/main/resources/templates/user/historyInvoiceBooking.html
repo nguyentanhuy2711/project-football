@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base.html}">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+
+  <title>😈 Stone Devil</title>
+
+  <link th:href="@{../../usercssjs/assets/css/styles1.css}" rel="stylesheet" />
+  <!---------------------------  SWEET ALERT ---------------------------->
+
+  <link th:href="@{../../plugins/sweetalert/sweetalert.css}" rel="stylesheet" />
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#example').DataTable({
+        "order": []
+      });
+    } );
+  </script>
+  <script>
+    $(document).ready(() => {
+      $("#home-active").removeClass("active");
+      $("#profile-active").addClass("active");
+    })
+
+  </script>
+</head>
+
+<body>
+
+<div class="d-flex" id="wrapper" layout:fragment="content" th:if="${profile}">
+  <!-- Sidebar-->
+  <div class="border-end bg-white"  id="sidebar-wrapper" >
+    <div class="sidebar-heading border-bottom badge-danger"><i class="fas fa-key" ></i>TÀI KHOẢN CỦA TÔI</div>
+    <div class="list-group list-group-flush">
+      <a class="list-group-item list-group-item-action list-group-item-light p-3 " th:href="@{/user/profile}" ><i  class="fas fa-id-card" style="margin-right: 5%;"></i>HỒ SƠ</a>
+      <a class="list-group-item list-group-item-action list-group-item-light p-3 "
+         th:href="@{/user/change-password}" ><i class="fas fa-unlock-alt" style="margin-right: 5%;" ></i>THAY ĐỔI MẬT KHẨU</a>
+
+    </div>
+    <div class="border-end bg-white">
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3"
+           th:href="@{'/user/history-invoice/'+${profile.id}}" href="#"><i class="fas fa-file-invoice-dollar" style="margin-right: 5%;"></i>LỊCH SỬ ĐẶT HÀNG</a>
+      </div>
+      <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 active"
+           th:href="@{/user/history-invoice-booking}" href="#"><i class="fas fa-file-invoice-dollar" style="margin-right: 5%;"></i>LỊCH SỬ ĐẶT SÂN</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content wrapper-->
+  <div id="page-content-wrapper">
+    <button class="btn btn-outline-danger" id="sidebarToggle"><i class="fas fa-exchange-alt"></i></button>
+    <!-- Top navigation-->
+    <div class="col-sm-12 " >
+      <div class="card">
+        <div class="card-header " style="background-color: red; color: white;border-radius: 15px;border-style:double">
+          <h2>LỊCH SỬ ĐẶT SÂN</h2>
+        </div>
+        <div class="card-body" style="overflow-x:auto;">
+
+          <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+            <tr>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Ngày đặt</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Tiền dịch vụ</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Tiền sân</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Tổng tiền</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Trả trước</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Thanh Toán</p></th>
+              <th><p style="text-align: center;font-weight: bolder;font-size: medium">Trạng Thái</p></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item,iStat:${historyInvoiceBooking}">
+              <td style="text-align: center;font-weight: bolder" th:text="${item.bookingDateCreate}"></td>
+
+              <td>
+                <div>
+                  <p style="text-align: center;font-weight: bolder" th:text="${#numbers.formatDecimal(item.totalService,0, 'COMMA', 0, 'POINT')} + ' đ'"></p>
+                  <div style="text-align: center">
+                    <button style=""  class="btn btn-outline-info waves-effect" >
+                      <a th:href="@{'/user/history-invoice-booking-service/'+${item.footballPitchScheduleId}}"  class=""><i class="fas fa-info-circle "></i></a>
+                    </button>
+                  </div>
+                  <p style="text-align: center;font-weight: bolder;color: #0b5ed7">Chi Tiết Dịch Vụ</p>
+                </div>
+              </td>
+
+              <td >
+                <p style="text-align: center;font-weight: bolder" th:text="${#numbers.formatDecimal(item.totalPitch,0, 'COMMA', 0, 'POINT')} + ' đ'"></p>
+                <div style="text-align: center">
+                  <button  class="btn btn-outline-info waves-effect" >
+                    <a  th:href="@{'/user/history-invoice-booking-pitch/'+${item.footballPitchScheduleId}}"  class=""><i class="fas fa-info-circle "></i></a>
+                  </button>
+                </div>
+                <p style="text-align: center;font-weight: bolder;color: #0b5ed7">Chi Tiết Đặt Sân</p>
+
+              </td>
+
+              <td > <p style="text-align: center;font-weight: bolder" th:text="${#numbers.formatDecimal(item.totalBooking,0, 'COMMA', 0, 'POINT')} + ' đ'"></p></td>
+
+              <td > <p  style="text-align: center;font-weight: bolder" th:text="${#numbers.formatDecimal(item.bookingAmount,0, 'COMMA', 0, 'POINT')} + ' đ'"><p/></td>
+
+              <td> <p  style="text-align: center;font-weight: bolder;color: green" th:text="${item.bookingPayment}"></td>
+              <td>
+                <div  style="text-align: center;font-weight: bolder;" th:switch="${item.bookingIdStatus}" >
+                  <p style=" font-weight: bold;color: blue" th:case="1">Xác nhận</p>
+                  <p style=" font-weight: bold;color: gray" th:case="2">Chưa xác nhận</p>
+                  <p style=" font-weight: bold;color: red" th:case="3">Hủy đơn</p>
+                  <p style=" font-weight: bold;color: green" th:case="4">Hoàn thành</p>
+                </div>
+              </td>
+
+            </tr>
+
+            </tbody>
+          </table>
+          <div class="modal fade" id="confirmationId" tabindex="-1" role="dialog"
+               aria-labelledby="modelTitleId" aria-hidden="true">
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Page content-->
+  </div>
+  <script language="text/Javascript">
+    cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+    function clearField(t) {                   //declaring the array outside of the
+      if (!cleared[t.id]) {                      // function makes it static and global
+        cleared[t.id] = 1;  // you could use true and false, but that's more typing
+        t.value = '';         // with more chance of typos
+        t.style.color = '#fff';
+      }
+    }
+  </script>
+
+</div>
+
+
+
+
+</body>
+
+</html>
